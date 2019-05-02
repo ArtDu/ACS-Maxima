@@ -125,8 +125,39 @@ print("14.7")$
 differ:'diff(y,x,2)+2*'diff(y,x)=e^x*(sin(x)+cos(x));
 answer:ode2(differ,y,x);
 
+
 kill(all)$
+load("simplify_sum")$
 print("Раздел 6")$
 print("1.7")$
-func:f(x):=8/(x^2-8*n+15);
-sum(f(n),n,1,inf);
+func:f(n):=8/(n^2-8*n+15)$
+sum17:sum(f(n),n,6,inf)$
+sum17ex:simplify_sum(sum17)$
+print(sum17,"=", sum17ex)$
+
+
+
+
+kill(all)$
+load("simplify_sum")$
+print("4.7")$
+func:f(n):=(1/n!)*atan(5/n)$
+sum:sum(f(n),n,1,inf);
+print("По Даламберу")$
+a:f(n)$
+b:f(n+1)$
+ans:'limit(b/a,n,inf)$
+print(ans,"=", ev(ans, nouns))$
+print("Ряд сходится, так как предел равен 0")$
+
+
+
+kill(all)$
+load("simplify_sum")$
+print("5.7")$
+func:f(n):=((4*n-3)/(5*n+1))**n^2$
+sum57:sum(f(n),n,1,inf);
+lim57:'limit(f(n)^1/n, n, inf)$
+lim57ex:'limit(f(n)^1/n, n, inf)$
+print(lim57,"=", ev(lim57ex,nouns))$
+print("Так как предел меньше 1, то ряд сходится", c)$
