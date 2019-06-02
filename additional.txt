@@ -1,0 +1,393 @@
+kill(all)$
+print("Задание 1")$
+f([x]):=(
+product:[],
+for p:2 step 1 thru length(x)
+     do (product:append(product, [x[p-1]+x[p]])),
+product:append(product, [x[1]+x[length(x)]])
+)$
+print("f(1,2,3,4,5) =",f(1,2,3,4,5))$
+
+
+
+
+kill(all)$
+print("Задание 2")$
+
+getIndex(C):=(
+[r:0],
+if C>=0 then r:1
+else  r:-1
+)$
+getABC(eq):=(
+    [A,B,C],
+    eq:lhs(eq),
+    C:ev(eq,x=0,y=0),
+    A:ev(eq,x=1,y=0)-C,
+    B:ev(eq,x=0,y=1)-C,
+    [A,B,C]
+)$
+getCommonEq(eq):=(
+    [
+        res:eq,
+        x:0,
+        y:0,
+        t_x:0,
+        a_x:0,
+        a_y:0,
+        x_1:0,
+        y_1:0
+    ],
+
+    if listp(eq)=false then(
+            eq:eq,
+            if numberp(rhs(eq)) then res:lhs(eq)-rhs(eq)=0
+            else res:lhs(eq)*denom(rhs(eq))*denom(lhs(eq))-rhs(eq)*denom(rhs(eq))*denom(lhs(eq))=0
+    )
+    else (
+
+            x:rhs(eq[1]),
+            y:rhs(eq[2]),
+            x_1:ev(x,t=0),
+            y_1:ev(y,t=0),
+            a_x:coeff(x,t),
+            a_y:coeff(y,t),
+            if a_x=0 then res:'x -x_1=0
+            elseif a_y=0 then res:'y-y_1=0
+            else (
+                eq: ('x-x_1)/a_x=('y-y_1)/a_y,
+                res:getCommonEq(eq)
+            )
+    ),
+        res
+)$
+f(eq):=(
+eq:getCommonEq(eq),
+[res:0,k:getABC(eq),get:0],
+get:-getIndex(k[3])*sqrt(k[1]**2+k[2]**2),
+res:expand(lhs(eq)/get),
+res=0
+)$
+
+e:16=3/4*x$
+l:[x=5,y=16-3*t]$
+
+f(l);
+f(e);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+kill(all)$
+print("Задание 3")$
+load("eigen")$
+
+getABC(eq):=(
+    [A,B,C],
+    eq:lhs(eq),
+    C:ev(eq,x=0,y=0),
+    A:ev(eq,x=1,y=0)-C,
+    B:ev(eq,x=0,y=1)-C,
+    [A,B,C]
+)$
+getNormVec(eq):=(
+    [A,B,C],
+    eq:lhs(eq),
+    C:ev(eq,x=0,y=0),
+    A:ev(eq,x=1,y=0)-C,
+    B:ev(eq,x=0,y=1)-C,
+    [A,B]
+)$
+getCommonEq(eq):=(
+    [
+        res:eq,
+        x:0,
+        y:0,
+        t_x:0,
+        a_x:0,
+        a_y:0,
+        x_1:0,
+        y_1:0
+    ],
+
+
+
+    if listp(eq)=false then(
+            eq:eq,
+            if numberp(rhs(eq)) then res:lhs(eq)-rhs(eq)=0
+            else res:lhs(eq)*denom(rhs(eq))*denom(lhs(eq))-rhs(eq)*denom(rhs(eq))*denom(lhs(eq))=0
+    )
+    else (
+
+            x:rhs(eq[1]),
+            y:rhs(eq[2]),
+            x_1:ev(x,t=0),
+            y_1:ev(y,t=0),
+            a_x:coeff(x,t),
+            a_y:coeff(y,t),
+            if a_x=0 then res:'x -x_1=0
+            elseif a_y=0 then res:'y-y_1=0
+            else (
+                eq: ('x-x_1)/a_x=('y-y_1)/a_y,
+                res:getCommonEq(eq)
+            )
+    ),
+    res
+)$
+
+
+f(l1,l2):=(
+    l1:getCommonEq(l1),l2:getCommonEq(l2),
+    [
+        phi:0,
+        M:0,
+        h:0,
+        k1:getABC(l1),
+        k2:getABC(l2),
+        n1:getNormVec(l1),
+        n2:getNormVec(l2)
+    ],
+
+
+    if (k1[1]/k2[1])=(k1[2]/k2[2]) and (k1[1]/k2[1])=(k1[3]/k2[3]) and (k1[2]/k2[2])=(k1[3]/k2[3]) then
+        print("Прямые совпадают")
+    elseif (k1[1]/k2[1])=(k1[2]/k2[2]) then
+    (
+        print("Прямые параллельны"),
+        h:abs(k1[3]-k2[3])/sqrt(n1.n2),
+        print("Расстояние между ними h = ",h),
+        h
+    )
+    else (
+        print("Прямые пересекаются"),
+        phi:acos((n1.n2)/(sqrt(n1.n1)*sqrt(n2.n2))),
+        M:[(k1[2]*k2[3]-k1[3]*k2[2])/(k1[1]*k2[2]-k1[2]*k2[1]),(k1[3]*k2[1]-k1[1]*k2[3])/(k1[1]*k2[2]-k1[2]*k2[1])],
+        print("α = ",phi),
+        print("M = ",covect(M)),
+        [phi,covect(M)]
+    )
+)$
+
+
+/*l_1:5*x-2*y-16=0;
+l_2:2*x-5*y-19=0;
+f(l_1,l_2)$*/
+
+l_1:1*x-2*y-3=0;
+l_2:2*x-4*y-10=0;
+f(l_1,l_2)
+
+/*l_1:1*x-2*y-3=0;*/
+/*l_1:[x=t,y=t/2-3/2];
+l_2:2*x-4*y-6=0;
+f(l_1,l_2)$*/;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+kill(all)$
+print("Задание 4")$
+load("eigen")$
+getABCD(eq):=(
+    [A,B,C,D],
+    eq:lhs(eq),
+    D:ev(eq,x=0,y=0,z=0),
+    A:ev(eq,x=1,y=0,z=0)-D,
+    B:ev(eq,x=0,y=1,z=0)-D,
+    C:ev(eq,x=0,y=0,z=1)-D,
+    [A,B,C,D]
+)$
+getNormVec(eq):=(
+    [A,B,C,D],
+    eq:lhs(eq),
+    D:ev(eq,x=0,y=0,z=0),
+    A:ev(eq,x=1,y=0,z=0)-D,
+    B:ev(eq,x=0,y=1,z=0)-D,
+    C:ev(eq,x=0,y=0,z=1)-D,
+    [A,B,C]
+)$
+
+point_inter(a,M,S):=(
+    [root:0],
+    root:solve(ev(lhs(a),x=M[1]+S[1]*t,y=M[2]+S[2]*t,z=M[3]+S[3]*t)=0,t),
+    root:rhs(root[1]),
+    [M[1]+S[1]*root,M[2]+S[2]*root,M[3]+S[3]*root]
+)$
+
+point_line(L):=[ev(rhs(L[1]),t=0),ev(rhs(L[2]),t=0),ev(rhs(L[3]),t=0)]$ /* точка на прямой*/
+s_line(L):=[coeff(rhs(L[1]),t),coeff(rhs(L[2]),t),coeff(rhs(L[3]),t)]$/* направляющий вектор прямой */
+
+f(a,L):=(
+    [
+        s_p,
+        alpha:0,
+        M:0,
+        h:0,
+        k:getABCD(a),
+        n:getNormVec(a),
+        s:s_line(L),
+        a_l:lhs(a),
+        M_0:point_line(L)
+    ],
+
+    if covect(n).covect(s)=0 and ev(a_l,x=M_0[1],y=M_0[2],z=M_0[3])=0
+        then print("Прямая лежит на плоскости")
+    elseif n.s=0
+        then (
+        print("Прямая параллельна плоскости"),
+        h:abs(k[4] - (n[1]*s[1]+n[2]*s[2]+n[3]*s[3])),
+        print("h = ",h),
+        h
+        )
+    else (
+        print("Прямая пересекает плоскость"),
+        M:point_inter(a,M_0,s),
+        print(""),
+        alpha:asin((covect(n).covect(s))/(sqrt(covect(n).covect(n))*sqrt(covect(s).covect(s)))),
+        s_p:s*cos(alpha),
+        print("Точка пересечения M = ",M ),
+        print("Угол между прямой и плоскостью α = ",alpha),
+        print("Проекция прямой состоит из точки и направляющего вектора"),
+        print('M_0,"=",M),
+        print('s_p,"=",s_p)
+    )
+)$
+
+print("Прямая задана в параметрическом виде")$
+L:[x=1,y=2+3*t,z=3+4*t]$
+a:1*x+2*y+3*z+15=0$
+
+f(a,L)$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+kill(all)$
+print("Задание 5")$
+kill(all)$
+getABCD(eq):=(
+    [A,B,C,D],
+    eq:lhs(eq),
+    D:ev(eq,x=0,y=0,z=0),
+    A:ev(eq,x=1,y=0,z=0)-D,
+    B:ev(eq,x=0,y=1,z=0)-D,
+    C:ev(eq,x=0,y=0,z=1)-D,
+    [A,B,C,D]
+)$
+getNormVec(eq):=(
+    [A,B,C,D],
+    eq:lhs(eq),
+    D:ev(eq,x=0,y=0,z=0),
+    A:ev(eq,x=1,y=0,z=0)-D,
+    B:ev(eq,x=0,y=1,z=0)-D,
+    C:ev(eq,x=0,y=0,z=1)-D,
+    [A,B,C]
+)$
+
+
+
+point_p(a,M):=(
+    [
+        x:0,
+        y:0,
+        z:0,
+        k:getABCD(a)
+    ],
+    x:((k[2]**2+k[3]**2)*M[1]-k[1]*k[2]*M[2]-k[1]*k[3]*M[3]-k[1]*k[4])/(k[1]**2+k[2]**2+k[3]**2),
+    y:(-k[1]*k[2]*M[1]+(k[1]**2+k[3]**2)*M[2]-k[2]*k[3]*M[3]-k[1]*k[4])/(k[1]**2+k[2]**2+k[3]**2),
+    z:(-k[1]*k[3]*M[1]-k[2]*k[3]*M[2]+(k[1]**2+k[2]**2)*M[3]-k[3]*k[4])/(k[1]**2+k[2]**2+k[3]**2),
+    [x,y,z]
+)$
+
+f(a1,a2,M):=(
+    [
+        M_01:0,
+        M_02:0,
+        s1:0,s2:2,
+        n1:getNormVec(a1),
+        n2:getNormVec(a2)
+    ],
+
+    if ev(lhs(a1),x=M[1],y=M[2],z=M[3])=0 and ev(lhs(a2),x=M[1],y=M[2],z=M[3])=0 then
+        print("Точка лежит на пересечении плоскостей")
+    elseif ev(lhs(a1),x=M[1],y=M[2],z=M[3])=0 then
+        print("Точка лежит в первой плоскости " , a1)
+    elseif ev(lhs(a2),x=M[1],y=M[2],z=M[3])=0 then
+        print("Точка лежит во второй плоскости ", a2)
+    else
+        print("Точка лежит вне плоскотей"),
+
+    M_01:point_p(a1,M),
+    M_02:point_p(a2,M),
+    print("Проекция точки на плоскость",a1,'M_01,"=",M_01),
+    s1:M-M_01,
+
+    if s1.n1>0 then
+        print("Точка лежит сверху плоскости")
+    else
+        print("Точка лежит снизу плоскости"),
+    print("Проекция точки на плоскость",a2,'M_02,"=",M_02),
+    s2:M-M_02,
+    if s2.n1>0 then
+        print("Точка лежит сверху плоскости")
+    else
+        print("Точка лежит снизу плоскости"),
+
+    [M_01,M_02]
+)$
+
+a_1:1*x+2*y+3*z+4=0$
+a_2:5*x+4*y+3*z+8=0$
+M:[-10,-20,30]$
+
+f(a_1,a_2,M);

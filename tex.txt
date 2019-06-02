@@ -1,0 +1,165 @@
+kill(all)$
+load("eigen")$
+load("simplify_sum")$
+
+file_output_append:true$
+s: openw("out.tex")$
+
+printf(s, "\\documentclass[pdf, unicode, 12pt, a4paper,oneside,fleqn]{article}")$
+newline(s)$
+
+printf(s, "\\usepackage[utf8]{inputenc}~%")$
+printf(s, "\\usepackage[T2B]{fontenc}~%")$
+printf(s, "\\usepackage[english,russian]{babel}~%")$
+printf(s, "\\frenchspacing~%")$
+printf(s, "\\usepackage{amsmath}~%")$
+printf(s, "\\usepackage{amssymb}~%")$
+printf(s, "\\usepackage{hyperref}~%")$
+printf(s, "\\usepackage{longtable}~%")$
+printf(s, "\\usepackage[table]{xcolor}~%")$
+printf(s, "\\usepackage{array}~%")$
+printf(s, "\\usepackage{color}~%")$
+printf(s, "\\usepackage{xcolor}~%")$
+printf(s, "\\usepackage{hyperref}~%")$
+printf(s, "\\usepackage{graphicx}~%")$
+printf(s, "\\usepackage{listings}~%")$
+printf(s, "\\lstset{tabsize=2,
+    breaklines,
+    columns=fullflexible,
+    flexiblecolumns,
+    numbers=left,
+    numberstyle={\\footnotesize},
+    extendedchars,
+    inputencoding=utf8}~%")$
+printf(s, "\\usepackage{longtable}~%")$
+printf(s, "\\def\\@xobeysp{ }~%")$
+printf(s, "\\def\\verbatim@processline{\\hspace{1.2cm}\\raggedright\\the\\verbatim@line\\par}~%")$
+printf(s, "\\oddsidemargin=-0.4mm~%")$
+printf(s, "\\textwidth=160mm~%")$
+printf(s, "\\topmargin=4.6mm~%")$
+printf(s, "\\textheight=210mm~%")$
+printf(s, "\\parindent=0pt~%")$
+printf(s, "\\parskip=3pt~%")$
+printf(s, "\\definecolor{lightgray}{gray}{0.9}~%")$
+printf(s, "\\renewcommand{\\thesubsection}{\\arabic{subsection}}~%")$
+printf(s, "\\lstdefinestyle{customc}{
+  belowcaptionskip=1\\baselineskip,
+  breaklines=true,
+  frame=L,
+  xleftmargin=\\parindent,
+  language=C,
+  showstringspaces=false,
+  basicstyle=\\footnotesize\ttfamily,
+  keywordstyle=\\bfseries\\color{green!40!black},
+  commentstyle=\\itshape\\color{gray},
+  identifierstyle=\\color{black},
+  stringstyle=\\color{blue},
+}~%")$
+printf(s, "\\lstdefinestyle{customasm}{
+  belowcaptionskip=1\\baselineskip,
+  frame=L,
+  xleftmargin=\\parindent,
+  language=[x86masm]Assembler,
+  basicstyle=\\footnotesize\\ttfamily,
+  commentstyle=\\itshape\\color{purple!40!black},
+}~%")$
+printf(s, "\\lstset{escapechar=@,style=customc}~%")$
+printf(s, "\\newcommand{\\CWPHeader}[1]{\\addtocounter{section}{-1}\\section{#1}}~%")$
+printf(s, "\\begin{document}")$
+newline(s)$
+
+
+printf(s, "\\section*{Статья в формате TeX о многочленаx Цернике.}")$
+newline(s)$
+printf(s, "\\par\\textbf{Задача:} Вычислить первые 5 многочленов и построить их грaфики.")$
+newline(s)$
+printf(s, "\\subsection*{Определения:}~%")$
+
+
+printf(s, "Есть чётные и нечётные многочлены Цернике. Чётные многочлены определены как~%")$
+PrintCosMPhi:cos(m*phi)$
+printf(s,"$$Z^{m}_{n}(~a,p)=R^{m}_{n}(p)*~a$$~%", tex1(phi), tex1(PrintCosMPhi))$
+
+
+printf(s, "а нечётные как\\\\~%")$
+PrintSinMPhi:sin(m*phi)$
+printf(s,"$$Z^{-m}_{n}(~a,p)=R^{m}_{n}(p)*~a$$~%", tex1(phi), tex1(PrintSinMPhi))$
+
+PrintZm_nAbs: abs(Zm_n(p,phi))<=1$
+printf(s, "где m и n — неотрицательные целые числа, такие что n≥m,
+    $~a$ — азимутальный угол, а ρ — радиальное расстояние, 0≤p≤1.
+    Многочлены Цернике ограничены в диапазоне от −1 до +1, т.е
+    $~a$. \\\\~%", tex1(phi), tex1(PrintZm_nAbs))$
+
+printf(s, "Радиальные многочлены $R_{n}^{m}$ определяются как\\\\~%")$
+
+
+RSumInner(m,n,p,k):=((-1)^k)*((n-k)!)/((k!)*(((n+m)/2-k)!)*(((n-m)/2-k)!))*p^(n-2*k)$
+RSum:sum(RSumInner(m,n,p,k),k,0,(n-m)/2)$ /* Радиальный многочлен */
+Rw(m,n):=sum(RSumInner(m,n,p,k),k,0,(n-m)/2)$ /* Функция радиального многочлена без p */
+R(m,n, p):=sum(RSumInner(m,n,p,k),k,0,(n-m)/2)$ /* Функция радиального многочлена c p */
+ZmnEven( m, n):= Rw(m,n) * cos(m*phi)$ /* Функция многочлена Цернике для четных */
+ZmnOdd( m, n):= Rw(m,n) * cos(m*phi)$ /* Функция многочлена Цернике для нечетных */
+
+printf(s, "$$R_{n}^{m}(p)=~a$$~%", tex1(RSum))$
+
+
+printf(s, "для чётных значений n − m , и тождественно равны нулю для нечётных n − m .\\\\~%")$
+
+
+
+printf(s, "\\subsection*{Ортогональность:}~%")$
+
+
+
+/*Радиальная ортогонализация*/
+funcOrtRadInner(m1,n1, n2):=p*sqrt(2*n1+2)*Rw(m1,n1)*sqrt(2*n2+2)*Rw(m1,n2)$
+funcOrtRad(m1,n1,n2):=integrate(funcOrtRadInner(m1,n1, n2),p,0,1)$
+
+/*Угловая ортогонализация*/
+funcOrtAngleInner(m1,m2):=cos(m1*phi)*cos(m2*phi)$
+funcOrtAngle(m1,m2):=integrate(funcOrtAngleInner(m1,m2),phi,0,2*pi)$
+
+/*Полная ортогонализация левая часть*/
+funcLHSInner(m1,n1,m2,n2):=p*ZmnEven(m2,n2) *ZmnEven(m1,n1)$
+funcLHS(m1,n1,m2,n2):=integrate(integrate(funcLHSInner(m1,n1,m2,n2),p,0,1),phi,0,2*pi)$
+
+/*Правая часть если m = 0*/
+funcRHSNullEqM(n1):=(pi)/(n1+1)$
+/*m != 0*/
+funcRHS(n1):=(pi)/(2*n1+2)$
+
+printf(s, "Ортогональность если m = 0:\\\\~%")$
+ortRhs: pi/(n+1)$
+printf(s, "$$\\int_{x=0}^1 Z^{m}_{n}(p,\\varphi)*Z^{m'}_{n'}(p,\\varphi) \\,dp = ~a$$\\\\~%", tex1(ortRhs))$
+
+printf(s, "Ортогональность если m $\\neq$ 0:\\\\~%")$
+ortRhs: pi/(2*n+2)$
+printf(s, "$$\\int_{x=0}^1 Z^{m}_{n}(p,\\varphi)*Z^{m'}_{n'}(p,\\varphi) \\,dp = ~a$$~%", tex1(ortRhs))$
+
+printf(s, "\\subsection*{Примеры:}~%")$
+
+/*<m , n>*/
+mList: [[0,0],[1,1],[0,2],[2,2],[1,3]]$
+for i:1 step 1 thru length(mList) do (
+
+    if mList[i][1] = 0 then (
+        if  funcLHS(mList[i][1],mList[i][2],mList[i][1],mList[i][2]) = funcRHSNullEqM(mList[i][2]) then
+            printf(s,"Является ортогональным:")
+        else
+            printf(s,"Не является ортогональным:")
+    )
+    elseif  funcLHS(mList[i][1],mList[i][2],mList[i][1],mList[i][2]) = funcRHS(mList[i][2]) then
+            printf(s,"Является ортогональным:")
+    else
+            printf(s,"Не является ортогональным:"),
+    printf(s,"$$R^{~a}_{~a}(p) = ~a$$~%",
+        tex1(mList[i][1]),tex1(mList[i][2]),tex1(ZmnEven(mList[i][1],mList[i][2]))),
+    graphName: concat("./graph",i,".png"),
+    printf(s,"\\includegraphics[scale=0.5]{~a}\\\\~%",graphName),
+    plot3d(ZmnEven(mList[i][1],mList[i][2]), [phi,0,2*%pi], [p,0,1],[png_file,graphName])
+
+)$
+
+newline(s)$
+printf(s, "\\end{document}")$
