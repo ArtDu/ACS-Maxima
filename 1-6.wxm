@@ -1,0 +1,326 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 22.04.0 ] */
+/* [wxMaxima: title   start ]
+Раздел 1
+   [wxMaxima: title   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(all)$
+print("Раздел 1")$
+print("5.7")$
+load("simplify_sum")$
+
+sum57:(sum(2*i-1,i,1,n))$
+sumex:simplify_sum(sum57)$
+
+lim57:'limit((sum57/(n+3))-n, n, inf)$
+lim57ex:'limit((sumex/(n+3))-n, n, inf)$
+print(lim57,"=", ev(lim57ex,nouns))$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: page break    ] */
+
+/* [wxMaxima: input   start ] */
+kill(all)$
+print("7.7")$
+
+lim77:'limit((9*x^2-1)/(x+1/3),x,-1/3)$
+print(lim77,"=", ev(lim77,nouns),"=",-6)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: page break    ] */
+
+/* [wxMaxima: input   start ] */
+kill(all)$
+print("12.7")$
+
+lim127:'limit((sin(x)^2-tan(x)^2)/(x-%pi)^4,x,%pi)$
+print(lim127,"=", ev(lim127,nouns))$
+/* [wxMaxima: input   end   ] */
+/* [wxMaxima: question  start ] */
+Question #1
+/* [wxMaxima: question  end   ] */
+/* [wxMaxima: answer  start ] */
+
+
+zero
+;
+/* [wxMaxima: answer  end   ] */
+
+
+/* [wxMaxima: page break    ] */
+
+/* [wxMaxima: input   start ] */
+kill(all)$
+print("19.7")$
+
+f(x):=(2-x/3)^(sin(pi)*x)$
+
+lim197:'limit(f(x),x,3)$
+print(lim197,"=", ev(lim197,nouns))$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: page break    ] */
+
+/* [wxMaxima: title   start ]
+Раздел 2
+   [wxMaxima: title   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(all)$
+print("Раздел 2")$
+print("2.7")$
+x0:4$
+f(x) := (1+sqrt(x))/(1-sqrt(x))$
+
+k:1/diff(f(x),x,1)$
+kev:ev(k,x=4)$
+y(x) :=  f(x0) - kev*(x-x0)$
+print("y(x) = ", y(x))$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: page break    ] */
+
+/* [wxMaxima: input   start ] */
+kill(all)$
+print("3.7")$
+func:f(x) := atan(sinh(x)) + sinh(x)*log(cosh(x));
+print("dy = ", diff(f(x),x))$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: page break    ] */
+
+/* [wxMaxima: input   start ] */
+kill(all)$
+print(11.7)$
+func:f(x):=(cot(3*x))^(2*exp(x));
+dy:diff(f(x),x,1)$
+print("dy =",dy)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: page break    ] */
+
+/* [wxMaxima: input   start ] */
+kill(all)$
+print("15.7")$
+x(t):=cat(exp(t)*2)$
+y(t):=log(tan(exp(t)))$
+print("x(t) =", x(t))$
+print("y(t) =", y(t))$
+a:diff(y(t),t,1)$
+b:diff(x(t),t,1)$
+a(t):=a/b$
+print("a(t) =", a(t))$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: page break    ] */
+
+/* [wxMaxima: input   start ] */
+kill(all)$
+print("17.4")$
+y(x):= x/(2*(3*x+2))$
+a(x):=diff(y(x),x, n)$
+print("y(x) =",y(x))$
+print("y(x)(n) =",ev(a(x),n))$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: page break    ] */
+
+/* [wxMaxima: title   start ]
+Раздел 3
+   [wxMaxima: title   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(all)$
+print("Раздел 3")$
+print("6.7")$
+y(x):=(2*x^2-6)/(x-2)$
+roots:solve(x-2,x)$
+print("y(x) =",y(x))$
+
+print("Асимтоты:")$
+if limit(y(x),x,rhs(roots[1]),minus) = minf then print("x = ",rhs(roots[1]))$
+
+
+if not(limit(y(x),x,inf)=inf or limit(y(x),x,inf)=minf or limit(y(x),x,inf)=pinf) 
+    then print("y = ",limit(y(x),x,inf))$
+k:limit(y(x)/x,x,inf)$
+b:limit(y(x)-k*x,x,inf)$
+
+if not(k = inf) and not(b=inf) then print("y = ",k*x+b)$
+x1:rhs(roots[1])$
+y_1(x):=k*x+b$
+l1:makelist(x1,x,-5,5)$
+
+wxplot2d([y_1(x),y(x),[discrete,l1,makelist(x,x,-5,5)]], [x,-5,5], [y,-5,5])$
+
+
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: page break    ] */
+
+/* [wxMaxima: title   start ]
+Раздел 4
+   [wxMaxima: title   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(all)$
+print("Раздел 4")$
+print("4.7")$
+func:f(x):=(8*x-atan(2*x))/(1+4*x^2);
+f:'integrate(f(x),x,0,1/2)$
+a:integrate(f(x),x,0,1/2)$
+print(f ,"=",a)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: page break    ] */
+
+/* [wxMaxima: input   start ] */
+kill(all)$
+print("8.4")$
+From:2*atan(1/3)$
+To:2*atan(1/2)$
+f(x):=(1/(sin(x)*(1-sin(x))))$
+f:'integrate(f(x),x,From,To)$
+a:integrate(f(x),x,From,To)$
+print(f ,"=",a)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: page break    ] */
+
+/* [wxMaxima: input   start ] */
+kill(all)$
+print("14.7")$
+From:0$
+To:%pi/2$
+f(x):=(cos(x)*sin(x)^2)$
+f:'integrate(f(x),x,From,To)$
+a:integrate(f(x),x,From,To)$
+print(f ,"=",a)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: page break    ] */
+
+/* [wxMaxima: input   start ] */
+kill(all)$
+print("17.6")$
+From:log(8)$
+To:log(15)$
+func:f(x):=(exp(x)+6);
+df(x):=diff(f(x),x)$
+L(x):=sqrt(1+(df(x))^2)$
+f:'integrate(L(x),x,From,To)$
+a:integrate(L(x),x,From,To)$
+print(f ,"=",a)$
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: page break    ] */
+
+/* [wxMaxima: title   start ]
+Раздел 5
+   [wxMaxima: title   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(all)$
+print("Раздел 5")$
+print("4.7")$
+differ:'diff(y,x)-y/x=x*sin(x);
+intergral:ode2(differ,y,x);
+x0:%pi/2$
+y0:1$
+answer:ic1(intergral, x=x0, y=y0);
+/*print("f(",x0,") = ", f(x0), "=", ans)$*/
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: page break    ] */
+
+/* [wxMaxima: input   start ] */
+kill(all)$
+print("14.7")$
+differ:'diff(y,x,2)+2*'diff(y,x)=e^x*(sin(x)+cos(x));
+answer:ode2(differ,y,x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: page break    ] */
+
+/* [wxMaxima: title   start ]
+Раздел 6
+   [wxMaxima: title   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(all)$
+load("simplify_sum")$
+
+print("Раздел 6")$
+print("1.7")$
+func:f(n):=8/(n^2-8*n+15)$
+sum17:sum(f(n),n,6,inf)$
+sum17ex:simplify_sum(sum17)$
+print(sum17,"=", sum17ex)$
+
+
+
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: page break    ] */
+
+/* [wxMaxima: input   start ] */
+kill(all)$
+load("simplify_sum")$
+print("4.7")$
+func:f(n):=(1/n!)*atan(5/n)$
+sum:sum(f(n),n,1,inf);
+print("По Даламберу")$
+a:f(n)$
+b:f(n+1)$
+ans:'limit(b/a,n,inf)$
+print(ans,"=", ev(ans, nouns))$
+print("Ряд сходится, так как предел равен 0")$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: page break    ] */
+
+/* [wxMaxima: input   start ] */
+kill(all)$
+load("simplify_sum")$
+print("5.7")$
+func:f(n):=((4*n-3)/(5*n+1))**n^2$
+sum57:sum(f(n),n,1,inf);
+
+lim57:'limit(f(n)^1/n, n, inf)$
+lim57ex:'limit(f(n)^1/n, n, inf)$
+print(lim57,"=", ev(lim57ex,nouns))$
+print("Так как предел меньше 1, то ряд сходится", c)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: page break    ] */
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 22.04.0"$
